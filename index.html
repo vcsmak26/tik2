@@ -1,0 +1,218 @@
+```html name=tictactoe.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Arial', sans-serif;
+        }
+
+        .container {
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+        }
+
+        .game-info {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            color: #555;
+            height: 30px;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-gap: 5px;
+            margin-bottom: 20px;
+            background-color: #667eea;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            background-color: white;
+            border: none;
+            font-size: 2em;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            color: #333;
+        }
+
+        .cell:hover {
+            background-color: #f0f0f0;
+            transform: scale(1.05);
+        }
+
+        .cell.a {
+            color: #667eea;
+        }
+
+        .cell.z {
+            color: #764ba2;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 1.1em;
+            background-color: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #764ba2;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .winner-message {
+            font-size: 1.5em;
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tic Tac Toe</h1>
+        <div class="game-info" id="gameInfo">Player A's Turn</div>
+        <div class="board" id="board">
+            <button class="cell" data-index="0"></button>
+            <button class="cell" data-index="1"></button>
+            <button class="cell" data-index="2"></button>
+            <button class="cell" data-index="3"></button>
+            <button class="cell" data-index="4"></button>
+            <button class="cell" data-index="5"></button>
+            <button class="cell" data-index="6"></button>
+            <button class="cell" data-index="7"></button>
+            <button class="cell" data-index="8"></button>
+        </div>
+        <button id="resetBtn">New Game</button>
+    </div>
+
+    <script>
+        const cells = document.querySelectorAll('.cell');
+        const gameInfo = document.getElementById('gameInfo');
+        const resetBtn = document.getElementById('resetBtn');
+
+        let gameBoard = ['', '', '', '', '', '', '', '', ''];
+        let currentPlayer = 'A';
+        let gameActive = true;
+
+        const winningConditions = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
+
+        function handleCellClick(e) {
+            const index = e.target.getAttribute('data-index');
+
+            if (gameBoard[index] !== '' || !gameActive) {
+                return;
+            }
+
+            gameBoard[index] = currentPlayer;
+            e.target.textContent = currentPlayer;
+            e.target.classList.add(currentPlayer.toLowerCase());
+
+            checkWinner();
+        }
+
+        function checkWinner() {
+            let roundWon = false;
+
+            for (let i = 0; i < winningConditions.length; i++) {
+                const [a, b, c] = winningConditions[i];
+                if (gameBoard[a] === '' || gameBoard[b] === '' || gameBoard[c] === '') {
+                    continue;
+                }
+                if (gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
+                    roundWon = true;
+                    break;
+                }
+            }
+
+            if (roundWon) {
+                gameInfo.textContent = `Player ${currentPlayer} Wins! 🎉`;
+                gameActive = false;
+                return;
+            }
+
+            if (!gameBoard.includes('')) {
+                gameInfo.textContent = "It's a Draw! 🤝";
+                gameActive = false;
+                return;
+            }
+
+            currentPlayer = currentPlayer === 'A' ? 'Z' : 'A';
+            gameInfo.textContent = `Player ${currentPlayer}'s Turn`;
+        }
+
+        function resetGame() {
+            gameBoard = ['', '', '', '', '', '', '', '', ''];
+            currentPlayer = 'A';
+            gameActive = true;
+            gameInfo.textContent = "Player A's Turn";
+
+            cells.forEach(cell => {
+                cell.textContent = '';
+                cell.classList.remove('a', 'z');
+            });
+        }
+
+        cells.forEach(cell => cell.addEventListener('click', handleCellClick));
+        resetBtn.addEventListener('click', resetGame);
+    </script>
+</body>
+</html>
+```
+
+Perfect! I've updated the Tic Tac Toe game to use **A** and **Z** instead of X and O. 
+
+**Changes made:**
+- Player 1 now uses **A** (shown in blue)
+- Player 2 now uses **Z** (shown in purple)
+- All game logic and mechanics remain the same
+- Display messages updated to show "Player A" and "Player Z"
+
+Save this as `tictactoe.html` and enjoy playing with A and Z! 🎮
